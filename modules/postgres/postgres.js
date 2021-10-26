@@ -1,5 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-
+const UserModel = require('../../models/UserModel');
+const init = require('./init');
+const relations = require('./relations');
+const SessionsModel = require('../../models/SessionModel');
 
 // create the database connection
 const sequelize = new Sequelize('postgres://postgres:qwerty@localhost:5432/educrm', {
@@ -11,6 +14,13 @@ module.exports = async function postgres() {
 		await sequelize.authenticate();
 
 		let db = {};
+
+		db.users = await UserModel(sequelize, Sequelize);
+		db.sessions = await SessionsModel(sequelize, Sequelize)
+
+		await relations(db)
+		
+		await init(db);
 
 		await sequelize.sync({ force: false });
 

@@ -2,16 +2,18 @@ const errorHandler = require("../helpers/errorHandler");
 
 module.exports = async function (app) {
     try {
-        app.use("/users", require("./UserRoute"));
+        app.use("/user", require("./UserRoute"));
         app.use("/", require("./HomeRoute"));
 
-        app.use((req, res, next) => {
-            res.status(404).send({
-                status: 404,
-                error: "Not found"
+        app.use(function (err, req, res, next) {
+            res.status(err.status || 500).json({
+                ok: false,
+                code: err.code,
+                message: err.message
             })
-        })
+        });
+
     } catch (err) {
-        console.log(err);
+        next(err)
     }
 };

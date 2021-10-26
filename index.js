@@ -3,7 +3,7 @@ const app = express();
 const routes = require("./routes/routes");
 const postgres = require("./modules/postgres/postgres");
 const customErrorMiddleware = require("./middlewares/customErrorMiddleware");
-require('dotenv').config();
+require('dotenv').config()
 
 async function server() {
 	try {
@@ -18,7 +18,7 @@ async function server() {
             next();
         });
 
-		// app.use(customErrorMiddleware);
+		app.use(customErrorMiddleware);
 
 		app.use(express.json());
 		app.use(express.urlencoded({ extended: true }));
