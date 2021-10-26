@@ -1,14 +1,17 @@
-const HomeRouter = require('../routes/HomeRoute');
-const UserRouter = require('../routes/UserRoute');
-const errorHandler = require('../helpers/errorHandler')
+const errorHandler = require("../helpers/errorHandler");
 
-module.exports = function(app) {
+module.exports = async function (app) {
     try {
-        app.use('/', HomeRouter)
-        app.use('/user', UserRouter)
-        console.log(errorHandler);
+        app.use("/users", require("./UserRoute"));
+        app.use("/", require("./HomeRoute"));
+
+        app.use((req, res, next) => {
+            res.status(404).send({
+                status: 404,
+                error: "Not found"
+            })
+        })
+    } catch (err) {
+        console.log(err);
     }
-    finally {
-        app.use(errorHandler);
-    }
-}   
+};
