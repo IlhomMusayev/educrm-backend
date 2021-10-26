@@ -1,7 +1,7 @@
-import Validations from "../modules/jwt";
+const Validations = require("../modules/validations");
 
-export default class UserControllers {
-    static async SignInController(req, req, next) {
+module.exports = class UserController {
+    static async SignInController(req, res, next) {
         try {
             const { username, password } = await Validations.SignInValidation(req.body, res.error);
             console.log(username, password);

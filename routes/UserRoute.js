@@ -1,8 +1,8 @@
-import Router from 'express';
-import UserController from '../controller/UserController.js'
+const Router = require('express');
+const UserController = require('../controller/UserController.js')
 
-const UserRoute = await Router();
+const UserRouter = Router();
 
-UserRoute.get('/users', UserController.SignInController)
+UserRouter.post('/users', UserController.SignInController);
 
-export default UserRoute;
+module.exports = UserRouter;

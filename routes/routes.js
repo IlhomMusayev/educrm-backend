@@ -1,12 +1,14 @@
-import HomeRoute from "./HomeRoute.js";
-import errorHandler from "../helpers/errorHandler.js";
-import UserRoute from "./UserRoute.js";
+const HomeRouter = require('../routes/HomeRoute');
+const UserRouter = require('../routes/UserRoute');
+const errorHandler = require('../helpers/errorHandler')
 
-export default function(app) {
+module.exports = function(app) {
     try {
-        app.use('/', HomeRoute)
-        app.use('/user', UserRoute)
-    } finally {
+        app.use('/', HomeRouter)
+        app.use('/user', UserRouter)
+        console.log(errorHandler);
+    }
+    finally {
         app.use(errorHandler);
     }
-}
+}   

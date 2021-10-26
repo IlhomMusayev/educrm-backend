@@ -1,9 +1,12 @@
-import Router from 'express';
+const Router = require('express');
 
-const HomeRoute = await Router();
+const HomeRouter = Router();
 
-HomeRoute.get('/', (req, res) => {
-    res.send('Hello World');
+HomeRouter.get('/', (req, res) => {
+    res.json({
+        ok: true,
+        message: 'Welcome to the API'
+    });
 })
 
-export default HomeRoute;
+module.exports = HomeRouter;

@@ -1,6 +1,6 @@
-import JOI from 'joi'
-import CustomError from '../helpers/costomError.js'
-export default class Validations {
+const JOI = require('joi')
+
+module.exports = class Validations {
     static async SignInValidation(data, CustomError){
         return await JOI.object({
             username: JOI.string().required().min(3).max(64).error(new CustomError("Name is invalid")),

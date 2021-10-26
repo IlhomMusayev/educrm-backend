@@ -1,5 +1,4 @@
-import pkg from 'sequelize';
-const { Sequelize, DataTypes } = pkg;
+const { Sequelize, DataTypes } = require('sequelize');
 
 
 // create the database connection
@@ -7,17 +6,16 @@ const sequelize = new Sequelize('postgres://postgres:qwerty@localhost:5432/educr
     logging: false,
 });    
 
-export default async function postgres() {
-    try {
-        await sequelize.authenticate();
+module.exports = async function postgres() {
+	try {
+		await sequelize.authenticate();
 
-        let db = {};
+		let db = {};
 
+		await sequelize.sync({ force: false });
 
-        await sequelize.sync({ force: false });
 		return db;
-
-    } catch (error) {
-        console.log("DATABASE ERROR: " + error);
-    }
-}
+	} catch (error) {
+		console.error("Unable to connect to the database:", error);
+	}
+};

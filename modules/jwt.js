@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken')
 
-export default class JWT{
+module.exports = class JWT{
     static async createToken(user) {
         return jwt.sign(user, process.env.JWT_SECRET, {
             expiresIn: '1d'
