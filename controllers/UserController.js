@@ -68,6 +68,8 @@ module.exports = class UserController {
 
 			if (!user) throw new res.error(400, "User not found");
 
+			if(user.user_password !== password) throw new res.error(400, "Password not match");
+
 			await req.db.sessions.destroy({
 				where: {
 					session_useragent: req.headers["user-agent"] || "Unknown",
@@ -126,11 +128,10 @@ module.exports = class UserController {
 			if (error.message == "Validation error") {
 				res.status(503).json({
 					ok: false,
-					message: "User oldindan mavjud",
+					message: "Username already exists",
 				})
 				return;
 			}
-			console.log(error);
 			next(error)
 		}
 	}

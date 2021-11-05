@@ -3,6 +3,8 @@ const UserModel = require('../../models/UserModel');
 const init = require('./init');
 const relations = require('./relations');
 const SessionsModel = require('../../models/SessionModel');
+const PermissionModel = require('../../models/PermissionModel')
+const UserPermissionModel = require('../../models/UserPermissionModel')
 
 // create the database connection
 const sequelize = new Sequelize('postgres://postgres:qwerty@localhost:5432/educrm', {
@@ -16,13 +18,15 @@ module.exports = async function postgres() {
 		let db = {};
 
 		db.users = await UserModel(sequelize, Sequelize);
-		db.sessions = await SessionsModel(sequelize, Sequelize)
+		db.sessions = await SessionsModel(sequelize, Sequelize)	
+		db.permissions = await PermissionModel(sequelize, Sequelize)
+		db.user_permissions = await UserPermissionModel(sequelize, Sequelize)
 
 		await relations(db)
 		
-		await init(db);
+		await init(db);	
 
-		// await sequelize.sync({ force: true });
+		await sequelize.sync({ force: false });
 
 		return db;
 	} catch (error) {
