@@ -3,10 +3,10 @@ module.exports = async function init(db) {
 
 	if (count === 0) {
 		const admin = await db.users.create({
-			user_username: "Ilhomjon",
-			user_password: "qwerty",
+			user_username: "admin",
+			user_password: "admin",
 			user_gender: "male",
-			user_name: "Ilhomjon",
+			user_name: "admin",
 		});
 
 	}
