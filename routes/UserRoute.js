@@ -1,14 +1,18 @@
 const {
 	SignInController,
-    UserGetController,
-    SignUpController
+	SignUpController,
+	UserGetController,
 } = require("../controllers/UserController");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 const UserRouter = require("express").Router();
 
-UserRouter.get('/', UserGetController);
 UserRouter.post("/sign_in", SignInController);
-UserRouter.post('/account', SignUpController)
-
+UserRouter.post(
+	"/account",
+	[authMiddleware],
+	SignUpController
+);
+UserRouter.get("/", [authMiddleware], UserGetController);
 
 module.exports = UserRouter;

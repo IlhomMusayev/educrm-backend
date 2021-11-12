@@ -24,4 +24,4 @@ module.exports = async function init(db) {
 
 		console.log(set_permission);
 	}
-}
+}  

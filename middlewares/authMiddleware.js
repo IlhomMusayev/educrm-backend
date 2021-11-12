@@ -1,36 +1,37 @@
 const { verifyToken } = require("../modules/jwt");
 
 module.exports = async function AuthMiddleware(req, res, next) {
-    try {
-        let token = req.headers.authorization;
+	try {
+		let token = req.headers.authorization;
 
-        if (!token) {
-            throw new Error(401, 'Token not found');
-        }
+		if (!token) {
+			throw new res.error(401, "Token is not found");
+			return;
+		}
 
-        token = verifyToken(token)
+		token = verifyToken(token);
 
-        console.log(token);
+		if (!token) {
+			throw new res.error(401, "Token is invalid");
+		}
 
-        const session = await req.db.sessions.findOne({ 
-            where: {
-                session_id: token.session_id,
-            },
-            include: req.db.users,
-            raw: true
-        })
+		const session = await req.db.sessions.findOne({
+			where: {
+				session_id: token.session_id,
+			},
+			include: req.db.users,
+			raw: true,
+		});
 
-        console.log(session);
-
-        if (!session) {
+		if (!session) {
 			throw new res.error(401, "Session isn't found");
 		}
 
-        req.session = session;
+        console.log(session);
+		req.session = session;
 
-        next()
-    } catch (error) {
-        next(error)
-        
-    }
-}
+		next();
+	} catch (error) {
+		next(error);
+	}
+};
