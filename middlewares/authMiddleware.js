@@ -27,7 +27,6 @@ module.exports = async function AuthMiddleware(req, res, next) {
 			throw new res.error(401, "Session isn't found");
 		}
 
-        console.log(session);
 		req.session = session;
 
 		next();

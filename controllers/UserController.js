@@ -7,52 +7,14 @@ const {
 } = require("../modules/jwt")
 
 const {
-	generateHash
+	generateHash,
+	compareHash
 } = require("../modules/bcrypt")
+
+const permissionChecker = require("../helpers/PermissionChecker");
 
 module.exports = class UserController {
 	static async SignInController(req, res, next) {
-		try {
-			const {
-				username,
-				password
-			} = await SignInValidation(req.body, res.error)
-
-			const user = await req.db.users.findOne({
-				where: {
-					user_username: username,
-				},
-				raw: true,
-			});
-			console.log(user);
-
-			// if (!user) throw new Error(500, 'User not found')
-
-			// if (!await generateHash(password).then(hash => hash === user.user_password)) throw new Error(500, 'Password not match')
-
-			// const token = await createToken(user.user_id)
-
-			// res.status(200).json({
-			// 	ok: true,
-			// 	message: "User signed in successfully",
-			// 	data: {
-			// 		token,
-			// 		user,
-			// 	},
-			// })
-
-		} catch (error) {
-			if (error.message == "Validation error") {
-				res.status(503).json({
-					ok: false,
-					message: "User oldindan mavjud",
-				})
-				return;
-			}
-			console.log(error);
-			next(error)
-		}
-
 		try {
 			const {
 				username,
@@ -68,7 +30,7 @@ module.exports = class UserController {
 
 			if (!user) throw new res.error(400, "User not found");
 
-			if(user.user_password !== password) throw new res.error(400, "Password not match");
+			if (!compareHash(password, user.user_password))throw new res.error(400, "Password not match");
 
 			await req.db.sessions.destroy({
 				where: {
@@ -102,6 +64,7 @@ module.exports = class UserController {
 
 	static async SignUpController(req, res, next) {
 		try {
+			permissionChecker('admin', req.user_permissions, res.error)
 			const {
 				name,
 				username,

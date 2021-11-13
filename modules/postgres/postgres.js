@@ -8,7 +8,7 @@ const UserPermissionModel = require('../../models/UserPermissionModel')
 
 // create the database connection
 const sequelize = new Sequelize('postgres://postgres:qwerty@localhost:5432/educrm', {
-    logging: false,
+    logging: true,
 });    
 
 module.exports = async function postgres() {
