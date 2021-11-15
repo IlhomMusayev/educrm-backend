@@ -47,6 +47,7 @@ module.exports = async (db) => {
 	await db.users.hasOne(db.teachers, {
 		foreignKey: {
 			name: "user_id",
+			unique: true,
 			allowNull: false,
 		}
 	})
