@@ -101,6 +101,8 @@ module.exports = class UserController {
 
 	static async UserGetController(req, res, next) {
 		try {
+			permissionChecker('admin', req.user_permissions, res.error)
+			
 			const page = req.query.page ? req.query.page - 1 : 0;
 			const limit = req.query.limit || 15;
 			const order = req.query.order == "DESC" ? "DESC" : "ASC";
@@ -120,7 +122,6 @@ module.exports = class UserController {
 					["createdAt", order]
 				],
 			});
-			console.log(users);
 			res.status(200).json({
 				ok: true,
 				message: "Users list",

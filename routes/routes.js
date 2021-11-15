@@ -5,6 +5,7 @@ module.exports = async function (app) {
         app.use("/user", require("./UserRoute"));
         app.use("/", require("./HomeRoute"));
         app.use('/teachers', require("./TeachersRoute"));
+        app.use('/courses', require("./CoursesRoute"));
 
     } finally {
         app.use(errorHandler);

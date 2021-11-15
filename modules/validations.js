@@ -26,4 +26,14 @@ module.exports = class Validations {
             skills: JOI.array().items(JOI.string()).required().error(new CustomError(400, "Skills in invalid"))
         }).validateAsync(data)
     }
+
+    static async CoursesValidation(data, CustomError) {
+        return await JOI.object({
+            course_title: JOI.string().required().min(5).max(128).error(new CustomError(400, "Course title is invalid")),
+            course_description: JOI.string().required().min(5).max(2048).error(new CustomError(400, "Course description is invalid")),
+            course_price: JOI.number().required().error(new CustomError(400, "Course price is invalid")),
+            course_length: JOI.number().required().error(new CustomError(400, "Course length is invalid")),
+        }).validateAsync(data)
+    }
+    
 }
