@@ -83,4 +83,40 @@ module.exports = class TeacherController {
             next(error)
         }
     }
+
+    static async GetAllTeachersGetController(req, res, next){
+        try{
+            permissionChecker('admin', req.user_permissions, res.error);
+
+			const page = req.query.page ? req.query.page - 1 : 0;
+			const limit = req.query.limit || 15;
+			const order = req.query.order == "DESC" ? "DESC" : "ASC";
+
+            const teachers = await req.db.teachers.findAll({
+                attributes: [
+                    "teacher_id",
+                    "teacher_phone", 
+                    "teacher_skills",
+                ],
+                include: req.db.users,
+                raw: true,
+				limit: limit,
+				offset: page * 15,
+				order: [
+					["createdAt", order]
+				],
+            })
+
+            res.status(200).json({
+				ok: true,
+				message: "Teachers list",
+				data: {
+					teachers,
+				},
+			});
+
+        } catch(error) {
+            next(error)
+        }
+    }
 }

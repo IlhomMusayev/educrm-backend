@@ -19,7 +19,7 @@ const path = require("path")
 const permissionChecker = require("../helpers/PermissionChecker");
 
 module.exports = class CoursesController {
-    static async createTeacher(req, res, next) {
+    static async createCourseController(req, res, next) {
         try {
             permissionChecker('admin', req.user_permissions, res.error);
 
@@ -54,6 +54,43 @@ module.exports = class CoursesController {
                 error.message = "Course already exists",
                 error.errorCode = 400
             }
+            next(error)
+        }
+    }
+
+    static async GetAllCoursesGetController(req, res, next){
+        try{
+            permissionChecker('admin', req.user_permissions, res.error);
+
+			const page = req.query.page ? req.query.page - 1 : 0;
+			const limit = req.query.limit || 15;
+			const order = req.query.order == "DESC" ? "DESC" : "ASC";
+
+            const courses = await req.db.courses.findAll({
+                attributes: [
+                    "course_id",
+                    "course_title", 
+                    "course_description",
+                    "course_price",
+                    "course_length"
+                ],
+                raw: true,
+				limit: limit,
+				offset: page * 15,
+				order: [
+					["createdAt", order]
+				],
+            })
+
+            res.status(200).json({
+				ok: true,
+				message: "Courses list",
+				data: {
+					courses,
+				},
+			});
+
+        } catch(error) {
             next(error)
         }
     }

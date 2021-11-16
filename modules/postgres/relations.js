@@ -58,7 +58,20 @@ module.exports = async (db) => {
 			allowNull: false,
 		}
 	})
+	
+	await db.courses.hasMany(db.applicants, {
+		foreignKey: {
+			name: "course_id",
+			allowNull: false,
+		},
+	});
 
+	await db.applicants.belongsTo(db.courses, {
+		foreignKey: {
+			name: "course_id",
+			allowNull: false,
+		},
+	});
 
 
 }

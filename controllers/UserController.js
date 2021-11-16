@@ -107,7 +107,6 @@ module.exports = class UserController {
 			const limit = req.query.limit || 15;
 			const order = req.query.order == "DESC" ? "DESC" : "ASC";
 
-			console.log(req.query);
 			const users = await req.db.users.findAll({
 				attributes: [
 					"user_id",
